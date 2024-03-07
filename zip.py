@@ -3,30 +3,51 @@ import shutil
 import tempfile
 import zipfile
 
-def main() :
-    inputFolder = "sample-data"
-    zipFolder(inputFolder)
+def main():
+    file_id = getFileIdFromUser()
+    zipFilesWithId(file_id)
 
-def zipFolder(inputFolder):
-    # Create a temporary directory to store files and directories
-    tempDir = tempfile.mkdtemp()
-    try:
-        # Copy the entire folder structure to the temporary directory
-        shutil.copytree(inputFolder, os.path.join(tempDir, os.path.basename(inputFolder)))
-        # Determine the output zip file name
-        outputZip = os.path.join(os.getcwd(), os.path.basename(inputFolder) + '.zip')
-        # Create a zip file
-        with zipfile.ZipFile(outputZip, 'w', zipfile.ZIP_DEFLATED) as zipFile:
-            # Iterate over the directory structure and add each file and directory to the zip file
-            for root, dirs, files in os.walk(tempDir):
-                for file in files:
-                    filePath = os.path.join(root, file)
-                    relativePath = os.path.relpath(filePath, tempDir)
-                    zipFile.write(filePath, relativePath)
-        print("Files zipped to " + outputZip)
-    finally:
-        # Clean up the temporary directory
-        shutil.rmtree(tempDir)
+def getFileIdFromUser():
+    return input("Enter the file ID to search for: ")
 
-if __name__ == "__main__" :
+def searchFilesWithId(file_id):
+    matching_files = []
+    for root, dirs, files in os.walk(".", topdown=True):
+        for file in files:
+            if file_id in file:
+                matching_files.append(os.path.join(root, file))
+    return matching_files
+
+def copyFilesToTempDirectory(files):
+    temp_dir = tempfile.mkdtemp()
+    for file_path in files:
+        relative_path = os.path.relpath(file_path, ".")
+        temp_file_path = os.path.join(temp_dir, relative_path)
+        os.makedirs(os.path.dirname(temp_file_path), exist_ok=True)
+        shutil.copy(file_path, temp_file_path)
+    return temp_dir
+
+def createZipFile(temp_dir, file_id):
+    output_zip = os.path.join(os.getcwd(), file_id + '.zip')
+    with zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        for root, dirs, files in os.walk(temp_dir):
+            for file in files:
+                file_path = os.path.join(root, file)
+                relative_path = os.path.relpath(file_path, temp_dir)
+                zip_file.write(file_path, relative_path)
+    return output_zip
+
+def zipFilesWithId(file_id):
+    matching_files = searchFilesWithId(file_id)
+    if matching_files:
+        temp_dir = copyFilesToTempDirectory(matching_files)
+        try:
+            output_zip = createZipFile(temp_dir, file_id)
+            print("Files with ID '{}' zipped to {}".format(file_id, output_zip))
+        finally:
+            shutil.rmtree(temp_dir)
+    else:
+        print("No files found with ID '{}'.".format(file_id))
+
+if __name__ == "__main__":
     main()
