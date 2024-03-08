@@ -4,7 +4,9 @@
 
 This file serves as a way to recursively download folders from AWS S3. It utilizes the `sh` library.
 
-You will need to configure your AWS credentials locally before using this. I recommend looking up the Quickstart on how to do this via terminal.
+You will need to configure your AWS credentials locally before using this:
+[AWS Configure](https://repost.aws/knowledge-center/s3-locate-credentials-error)
+The necessary information can be found via 1Password. 
 
 ```
 pip install -r requirements.txt
