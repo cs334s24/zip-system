@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Search Bar</title>
+    <meta charset="UTF-8">
+    <title>Request</title>
 </head>
 <body>
-    <form method="POST" action="/search">
-        <input type="text" id="searchInput" name="searchInput" placeholder="Search...">
-        <button type="submit">Search</button>
+    <div class="form-container">
+    <h2>Request</h2>
+    <form method="post" action="/docket-id">
+        <label for="docket-id">Docket ID:</label>
+        <input type="text" id="docket-id" name="docket-id" required>
+        
+        <!-- <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required> -->
+        
+        <button type="submit">Request</button>
     </form>
+    </div>
 </body>
 </html>
