@@ -23,11 +23,9 @@ def index():
 # Handling the form submission
 @app.route('/docket-id', methods=['POST'])
 def handle_form_submission():
-    # Get the 'docket-id' from the form data
-    docket_id = request.form['docket-id']
-    # Pass the 'docket-id' to another function
-    result = process_file_ids(docket_id)
-    # Send email
+    # Process the form submission
+    docket_id = request.form['docket_id']
+    process_file_ids([docket_id])
     try:
         gmail_send_email(request.form['email_id'])
         email_status = "Email sent successfully!"
@@ -35,7 +33,7 @@ def handle_form_submission():
         print(f"An error occurred while sending email: {e}")
         email_status = f"Failed to send email: {e}"
     # Return some response to the client
-    return f'Docket ID: {result}, Email Status: {email_status}'
+    return f'Docket ID: {docket_id}, Email Status: {email_status}'
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
