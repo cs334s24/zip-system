@@ -49,7 +49,7 @@ In order for it to work you must complete the following:
     1. Within the .env file make sure it contains the following
         ```
         EMAIL=ENTER_YOUR_EMAIL_HERE
-        PASSWORD=ENTER_YOUR_APP_PASSWORD_HERE
+        PASSWORD=ENTER_YOUR_APP_PASSWORD_HERE_(MAKE SURE THERE ARE NO SPACES WITHIN THE PASSWORD!)
         ```
     
 
