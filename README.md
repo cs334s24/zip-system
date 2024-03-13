@@ -1,21 +1,20 @@
 # zip-system
 
-### Downloading from S3 using Python
+### Requirements before use
 
 This file serves as a way to recursively download folders from AWS S3. It utilizes the `sh` library.
 
-You will need to configure your AWS credentials locally before using this:
-[AWS Configure](https://repost.aws/knowledge-center/s3-locate-credentials-error)
-The necessary information can be found via 1Password. 
+First and foremost, you must download the AWS Cli here: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+After you clone the repo you will have to create a virtual environment and install the necessary requirements
 
 ```
 pip install -r requirements.txt
 ```
 
-```
-python3 download_s3.py
-```
-
+Finally before you run any of the corresponding programs you will need to configure your AWS credentials locally before using this:
+[AWS Configure](https://repost.aws/knowledge-center/s3-locate-credentials-error)
+The necessary information can be found via 1Password. 
 ### Using zip.py
 
 This file serves as a way to zip up files.
