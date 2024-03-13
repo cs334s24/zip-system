@@ -2,7 +2,7 @@ import os
 import shutil as sh
 from flask import Flask, render_template, request
 from zip import download_from_s3, zipSampleData
-from sendEmail import gmail_send_email
+from sendEmail import sendEmail
 
 def process_file_ids(file_ids):
     if os.path.exists("temp-data"):
@@ -26,8 +26,10 @@ def handle_form_submission():
     # Process the form submission
     docket_id = request.form['docket_id']
     process_file_ids([docket_id])
+    email_status = ""
     try:
-        gmail_send_email(request.form['email_id'])
+        email_id = request.form['email_id']
+        sendEmail(email_id, docket_id)
         email_status = "Email sent successfully!"
     except Exception as e:
         print(f"An error occurred while sending email: {e}")
