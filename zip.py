@@ -13,6 +13,13 @@ def main():
     zipSampleData()
     print("data.zip has been created")
     sh.rm('-r', 'temp-data')
+    putZipToS3('data.zip')
+    sh.rm('data.zip')
+
+
+# put zip file to s3 bucket zip-system-put
+def putZipToS3(zip):
+    sh.aws('s3', 'cp', zip, 's3://zip-system-put')
 
 
 # Download the sample data from S3
