@@ -11,4 +11,6 @@ document.getElementById('request-form').addEventListener('submit', function(even
         console.log(xhr.responseText);
         }
     }
+    // delete the form data after submit
+    form.reset();
 });
