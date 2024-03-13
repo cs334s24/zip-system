@@ -1,11 +1,4 @@
-#Python
-#
+data
 .venv
-
-#Misc
-#
+data.zip
 .env
-
-#GoogleAPI
-#
-credentials.json
