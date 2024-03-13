@@ -7,7 +7,7 @@ from sendEmail import sendEmail
 def process_file_ids(file_ids):
     if os.path.exists("temp-data"):
         sh.rmtree('temp-data')
-    for file_id in file_ids:
+    for file_id in file_ids.split(','):
         print(file_id)
         download_from_s3(file_id)
     zipSampleData()
@@ -25,7 +25,7 @@ def index():
 def handle_form_submission():
     # Process the form submission
     docket_id = request.form['docket_id']
-    process_file_ids([docket_id])
+    process_file_ids(docket_id)
     email_status = ""
     try:
         email_id = request.form['email_id']
