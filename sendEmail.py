@@ -1,35 +1,27 @@
 import os
-import base64
 from dotenv import load_dotenv
-from email.message import EmailMessage
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+import smtplib
 
 load_dotenv()
 
-def load_credentials():
-    """Load credentials from the JSON file."""
-    credentials_file = os.getenv('CREDENTIALS_FILE_PATH')
-    return service_account.Credentials.from_service_account_file(credentials_file)
-
-def gmail_send_email(to_email):
-    """Send an email using the Gmail API."""
-    credentials = load_credentials()
-
+def sendEmail(to_email, docket_id):
     try:
-        # Create Gmail API client
-        service = build("gmail", "v1", credentials=credentials)
-        message = EmailMessage()
-        message.set_content("This is an automated email")
-        message["To"] = to_email
-        message["From"] = os.getenv('SENDER_EMAIL')
-        message["Subject"] = "Automated email"
-        # Encode message
-        encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
-        create_message = {"raw": encoded_message}
-        # Send the email
-        service.users().messages().send(userId="me", body=create_message).execute()
-        print("Email sent successfully!")
-    except HttpError as error:
-        print(f"An error occurred: {error}")
+        # Info
+        sender_email = os.getenv('EMAIL')
+        sender_password = os.getenv('PASSWORD')
+        # Content
+        subject = "Mirrulations Download Started!"
+        message = "Your download for docket " + docket_id + " has begun and will be done shortly. Hang tight!"
+        # Connect to the Gmail SMTP server
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            # Compose the email
+            email = f'Subject: {subject}\n\n{message}'
+            # Send the email
+            server.sendmail(sender_email, to_email, email)
+        return "Email sent successfully!"
+    except Exception as e:
+        print(f"An error occurred while sending email: {e}")
+        return f"Failed to send email: {e}"
+
