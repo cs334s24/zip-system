@@ -1,7 +1,7 @@
 import os
 import shutil as sh
 from flask import Flask, render_template, request
-from zip import download_from_s3, zipSampleData
+from zip import download_from_s3, zipSampleData, putZipToS3
 from sendEmail import sendEmail
 
 def process_file_ids(file_ids):
@@ -13,6 +13,8 @@ def process_file_ids(file_ids):
     zipSampleData()
     print("data.zip has been created")
     sh.rmtree('temp-data')
+    putZipToS3('data.zip')
+    os.remove('data.zip')
 
 app = Flask(__name__)
 
