@@ -3,11 +3,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Request</title>
+    <title>Docket Requests</title>
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
     <div class="form-container">
-    <h2>Request</h2>
+    <h2>Docket Requests</h2>
     <!-- Form to request docket id and email-->
     <form id="request-form" method="post">
         <div class="form-group">
@@ -19,9 +21,14 @@
         </div>
     </form>
     <!-- Message displayed after email has been sent -->
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
-    <script src="static/script.js"></script>
+    <div id="message"></div>
+    <script>
+        document.getElementById("request-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Display the message
+            document.getElementById("message").textContent = "Form submitted successfully!";
+        });
+    </script>
 </body>
 </html>

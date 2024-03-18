@@ -1,0 +1,63 @@
+/* Center the form container */
+.form-container {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light gray background */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+/* heading */
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* form */
+form {
+    margin-top: 20px;
+}
+
+/* form labels */
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555; 
+}
+
+/* form inputs */
+input[type="text"],
+input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+}
+
+/* submit button */
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #3C6E71; 
+    color: #fff; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #80d0d4; 
+}
+
+/* Style the message */
+.message {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #d4edda; 
+    color: #155724; 
+    border: 1px solid #c3e6cb; 
+    border-radius: 5px;
+}
