@@ -15,6 +15,8 @@
         <div class="form-group">
             <label for="docket_id">Docket ID</label>
             <input type="text" id="docket_id" name="docket_id">
+            <label for="name_id">Enter a name for the download (Leave blank for default)</label>
+            <input type="text" id="name_id" name="name_id">
             <label for="email">Email</label>
             <input type="email" id="email" name="email_id">
             <button type="submit">Submit</button>
@@ -26,8 +28,31 @@
         document.getElementById("request-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent form submission
 
-            // Display the message
-            document.getElementById("message").textContent = "Form submitted successfully!";
+            // Get the values entered in the form fields
+            var docketId = document.getElementById("docket_id").value;
+            var nameId = document.getElementById("name_id").value;
+            var emailId = document.getElementById("email").value;
+
+            // Prepare the data to be sent
+            var formData = new FormData();
+            formData.append('docket_id', docketId);
+            formData.append('name_id', nameId);
+            formData.append('email_id', emailId);
+
+            // Send the form data using Fetch API
+            fetch('/docket-id', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Display the response message
+                document.getElementById("message").textContent = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("message").textContent = "An error occurred while processing the form.";
+            });
         });
     </script>
 </body>

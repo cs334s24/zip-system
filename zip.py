@@ -51,8 +51,8 @@ def searchFilesWithIds(file_ids):
 
 
 # Zip temp-data into data.zip keeping data/ as the root directory
-def zipSampleData():
-    with zipfile.ZipFile('data.zip', 'w') as zipf:
+def zipSampleData(name_id):
+    with zipfile.ZipFile(name_id+'.zip', 'w') as zipf:
         for root, dirs, files in os.walk("temp-data"):
             for file in files:
                 zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), "temp-data"))

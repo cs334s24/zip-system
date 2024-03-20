@@ -4,17 +4,19 @@ from flask import Flask, render_template, request
 from zip import download_from_s3, zipSampleData, putZipToS3
 from sendEmail import sendEmail
 
-def process_file_ids(file_ids):
+def process_file_ids(file_ids, name_id):
+    if name_id == None or name_id == 0:
+        name_id = 'data'
     if os.path.exists("temp-data"):
         sh.rmtree('temp-data')
     for file_id in file_ids.split(','):
         print(file_id)
         download_from_s3(file_id)
-    zipSampleData()
-    print("data.zip has been created")
+    zipSampleData(name_id)
+    print(name_id+".zip has been created")
     sh.rmtree('temp-data')
-    putZipToS3('data.zip')
-    os.remove('data.zip')
+    putZipToS3(name_id+'.zip')
+    os.remove(name_id+'.zip')
 
 app = Flask(__name__)
 
@@ -27,7 +29,9 @@ def index():
 def handle_form_submission():
     # Process the form submission
     docket_id = request.form['docket_id']
-    process_file_ids(docket_id)
+    name_id = request.form['name_id']
+    process_file_ids(docket_id, name_id)
+    print(name_id+'.zip')
     email_status = ""
     try:
         email_id = request.form['email_id']
