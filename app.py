@@ -5,12 +5,11 @@ from zip import download_from_s3, zipSampleData, putZipToS3
 from sendEmail import sendEmail
 
 def process_file_ids(file_ids, name_id):
-    if name_id == None or name_id == 0:
-        name_id = 'data'
+    if len(name_id) == 0:
+        name_id = file_ids
     if os.path.exists("temp-data"):
         sh.rmtree('temp-data')
     for file_id in file_ids.split(','):
-        print(file_id)
         download_from_s3(file_id)
     zipSampleData(name_id)
     print(name_id+".zip has been created")
