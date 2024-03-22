@@ -23,13 +23,33 @@ def putZipToS3(zip):
 
 
 # Download the sample data from S3
-def download_from_s3(docket_id):
+def download_from_s3(docket_id):  
+    total_size_limit=500000000 # Set a total size limit (default: 500MB)
     if not os.path.exists("temp-data/data"):
-        os.mkdir("temp-data")
-        os.mkdir("temp-data/data")
-    os.mkdir("temp-data/data/" + docket_id)
+        os.makedirs("temp-data/data")
+
+    docket_dir = "temp-data/data/" + docket_id
+    print(f"Docker dir for {docket_id} is {docket_dir}.")
+    if os.path.exists(docket_dir):
+        print(f"Data for {docket_id} already exists, skipping download.")
+        return False  # Skip if the directory already exists
+
+    os.makedirs(docket_dir)
+
+    # Download files recursively from S3
     docket_info = docket_id.split("-")
-    sh.aws('s3', 'cp', 's3://mirrulations-sample-data-opensearch/' + docket_info[0] + '/' + docket_id, 'temp-data/data/' + docket_id, '--recursive')
+    sh.aws('s3', 'cp', 's3://mirrulations-sample-data-opensearch/' + docket_info[0] + '/' + docket_id, docket_dir, '--recursive')
+    print(f"Docker_info = {docket_info}")
+
+    # Calculate total size of downloaded files
+    total_size = sum(os.path.getsize(os.path.join(root, file)) for root, _, files in os.walk(docket_dir) for file in files)
+
+    if total_size > total_size_limit:
+        print(f"Downloaded size ({total_size} bytes) exceeded limit ({total_size_limit} bytes). Deleting downloaded data.")
+        sh.rm('-r', docket_dir)  # Delete downloaded data if limit exceeded
+        return True
+    else:
+        return False
 
 
 # Prompts the user to enter ID's for a desired file. 
@@ -50,12 +70,23 @@ def searchFilesWithIds(file_ids):
     return matching_files
 
 
-# Zip temp-data into data.zip keeping data/ as the root directory
-def zipSampleData(name_id):
-    with zipfile.ZipFile(name_id+'.zip', 'w') as zipf:
-        for root, dirs, files in os.walk("temp-data"):
-            for file in files:
-                zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), "temp-data"))
+# Zip temp-data into data.zip keeping temp-data/ as the root directory
+def zipSampleData(name_id, docket_ids):
+    count = 0
+    zip_file_name = f"{name_id}.zip"  # Define the name of the zip file
+    with zipfile.ZipFile(zip_file_name, 'w') as zipf:
+        for docket_id in docket_ids:
+            print(f"Docket Ids: {docket_ids}")
+            print(f"Current Docket Id: {docket_id}")
+            docket_dir = f"temp-data/data/{docket_id}"
+            for root, _, files in os.walk(docket_dir):  
+                count += 1
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    zipf.write(file_path, os.path.relpath(file_path, "temp-data")) 
+                    print(f"Added file to zip: {file_path}")
+                    print(f"Dir Count: {count}")
+    print(f"{zip_file_name} has been created")
 
 
 if __name__ == "__main__":
