@@ -17,7 +17,7 @@ def download_from_s3(docket_id):
     os.makedirs(docket_dir)
     # Download files recursively from S3
     docket_info = docket_id.split("-")
-    sh.aws('s3', 'cp', 's3://mirrulations-sample-data-opensearch/' + docket_info[0] + '/' + docket_id, docket_dir, '--recursive')
+    sh.aws('s3', 'cp', 's3://mirrulations-data/' + docket_info[0] + '/' + docket_id, docket_dir, '--recursive')
     # Calculate total size of downloaded files
     total_size = sum(os.path.getsize(os.path.join(root, file)) for root, _, files in os.walk(docket_dir) for file in files)
     if total_size > total_size_limit:
