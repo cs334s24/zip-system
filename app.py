@@ -15,11 +15,10 @@ def process_file_ids(file_ids, name_id):
         sh.rmtree('temp-data')
     tooBig = False  # Reset tooBig before processing file_ids
     for file_id in file_ids.split(','):
-        if download_from_s3(file_id):
+        if download_from_s3(file_id, name_id):
             tooBig = True  # Set tooBig to True if any file exceeds the size limit
     if not tooBig:
         zipSampleData(name_id, file_ids.split(','))  # Zip the downloaded files before deleting the temp-data directory
-        print(name_id+".zip has been created")
         putZipToS3(name_id+'.zip')
         os.remove(name_id+'.zip')
         sh.rmtree('temp-data')  # Delete the temp-data directory after zipping
