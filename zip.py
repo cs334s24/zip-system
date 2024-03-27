@@ -2,9 +2,6 @@ import os
 import zipfile
 import sh
 
-firstDownload = True
-folderInZip = ""
-
 # put zip file to s3 bucket zip-system-put
 def putZipToS3(zip):
     sh.aws('s3', 'cp', zip, 's3://zip-system-put')
@@ -12,13 +9,10 @@ def putZipToS3(zip):
 # Download the sample data from S3
 def download_from_s3(docket_id, name_id):  
     global firstDocketID
-    global folderInZip
     if name_id != None or name_id != "" or name_id != " ":
         firstDocketID = name_id
     else:
-        if firstDownload:
-            firstDocketID = docket_id
-            folderInZip = False
+        firstDocketID = docket_id
     total_size_limit=500000000 # Set a total size limit (default: 500MB)
     if not os.path.exists(f"temp-data/{firstDocketID}"):
         os.makedirs(f"temp-data/{firstDocketID}")
