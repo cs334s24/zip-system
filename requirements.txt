@@ -1,6 +1,7 @@
 sh
 awscli
 flask
+boto3
 python-dotenv
 google-auth 
 google-auth-oauthlib 
